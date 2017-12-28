@@ -39,6 +39,9 @@ nono_line.send('test message', sticker__id_pkgid=[(11, 1), (18, 2), (194, 3), (2
 * [LINE Sticker list](https://devdocs.line.me/files/sticker_list.pdf)
 
 ## Version History
+* v0.0.3
+  * If you pass a sticker list, a sticker will be selected randomly.
+
 * v0.0.2
   * First version release
 
