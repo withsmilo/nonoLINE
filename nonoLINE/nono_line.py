@@ -1,6 +1,7 @@
 import re
 import requests
 import logging
+import random
 from nonoLINE import InvalidTokenException
 from requests_futures.sessions import FuturesSession
 
@@ -47,16 +48,20 @@ class nonoLINE:
         ----------
         message : str
             your message
-        sticker__id_pkgid : tuple(int, int) (optional)
+        sticker__id_pkgid : tuple(int, int) or list[(int, int)] (optional)
             a specific sticker information, something like (sticker_id, sticker_package_id).
             Sticker information is here, https://devdocs.line.me/files/sticker_list.pdf.
+            If you pass a sticker list, select a sticker randomly.
         send_async : bool (optional)
             If you would like to send asynchronously, set this to True.
         """
         data = {'message': message}
         if type(sticker__id_pkgid) is tuple and len(sticker__id_pkgid) == 2:
-            data['stickerId'] = sticker__id_pkgid[0]
-            data['stickerPackageId'] = sticker__id_pkgid[1]
+            data.update({'stickerId': sticker__id_pkgid[0], 'stickerPackageId': sticker__id_pkgid[1]})
+        elif type(sticker__id_pkgid) is list and len(sticker__id_pkgid) > 0:
+            picked = random.choice(sticker__id_pkgid)
+            if type(picked) is tuple and len(picked) == 2:
+                data.update({'stickerId': picked[0], 'stickerPackageId': picked[1]})
 
         # Send a message
         try:
