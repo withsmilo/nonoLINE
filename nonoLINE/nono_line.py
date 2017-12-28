@@ -51,7 +51,7 @@ class nonoLINE:
         sticker__id_pkgid : tuple(int, int) or list[(int, int)] (optional)
             a specific sticker information, something like (sticker_id, sticker_package_id).
             Sticker information is here, https://devdocs.line.me/files/sticker_list.pdf.
-            If you pass a sticker list, select a sticker randomly.
+            If you pass a sticker list, a sticker will be selected randomly before sending the message.
         send_async : bool (optional)
             If you would like to send asynchronously, set this to True.
         """

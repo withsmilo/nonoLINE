@@ -13,8 +13,10 @@ $ pip install nono-line
 
 ## Usage
 ```python
-# Create a new nonoLINE object.
+# Import Python library
 from nonoLINE import nonoLINE
+
+# Create a new nonoLINE object.
 nono_line = nonoLINE('YOUR_ACCESS_TOKEN', max_workers=4)
 
 # Send a test message to LINE Notify.
@@ -26,6 +28,10 @@ nono_line.send('test message', send_async=True)
 # Send a test message with a sticker to LINE Notify.
 # LINE Sticker list is here, https://devdocs.line.me/files/sticker_list.pdf.
 nono_line.send('test message', sticker__id_pkgid=(11, 1))
+
+# Send a test message with a sticker list to LINE Notify.
+# A sticker will be selected randomly before sending the message.
+nono_line.send('test message', sticker__id_pkgid=[(11, 1), (18, 2), (194, 3), (272, 4)])
 ```
 
 ## Reference

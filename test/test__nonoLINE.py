@@ -43,4 +43,4 @@ if __name__ == '__main__':
     logging.info('Send a test message with a sticker random list to LINE')
     print_elapsed_time(nono_line.send,
                        '\n[4] This is a test message.\ncurrent time:{}'.format(datetime.now().strftime(time_format)[:-3]),
-                       sticker__id_pkgid=[(11, 1), (12, 2), (13, 3)])
+                       sticker__id_pkgid=[(11, 1), (18, 2), (194, 3), (272, 4)])
