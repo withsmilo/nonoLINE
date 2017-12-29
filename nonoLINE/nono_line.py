@@ -15,7 +15,7 @@ def _check_validity(chat_access_token):
     return res['targetType'], res['target'].encode('utf-8')
 
 
-class nonoLINE:
+class nonoLINE(object):
     def __init__(self, chat_access_token, max_workers=4):
         """Create a new nonoLINE object.
 
