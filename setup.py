@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='nono-line',
-    version='0.0.3',
+    version='0.0.4',
     packages=find_packages(exclude=['test']),
     url='https://github.com/withsmilo/nonoLINE',
     license='MIT',

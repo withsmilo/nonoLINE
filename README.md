@@ -44,6 +44,9 @@ The limit of API calls per hour is set to 1000. The limit is per access token.
 * [LINE Sticker list](https://devdocs.line.me/files/sticker_list.pdf)
 
 ## Version History
+* 2017.12.29 : v0.0.4
+  * Set a parent class(object) to nonoLINE.
+
 * 2017.12.28 : v0.0.3
   * If you pass a sticker list to send(), a sticker will be selected randomly.
 
