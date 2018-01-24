@@ -23,7 +23,7 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s.%(msecs)03d %(levelname)-08s [%(filename)s:%(lineno)s] %(message)s',
                         level=logging.INFO)
 
-    nono_line = nonoLINE('YOUR_ACCESS_TOKEN')
+    nono_line = nonoLINE('YOUR_ACCESS_TOKEN', default_tag='TEST1')
     time_format = '%Y%m%d - %H%M%S.%f'
 
     logging.info('Send a test message to LINE')
@@ -44,3 +44,8 @@ if __name__ == '__main__':
     print_elapsed_time(nono_line.send,
                        '\n[4] This is a test message.\ncurrent time:{}'.format(datetime.now().strftime(time_format)[:-3]),
                        sticker__id_pkgid=[(11, 1), (18, 2), (194, 3), (272, 4)])
+
+    logging.info('Send a test message to LINE with a new tag')
+    print_elapsed_time(nono_line.send,
+                       '\n[5] This is a test message.\ncurrent time:{}'.format(datetime.now().strftime(time_format)[:-3]),
+                       tag='TEST2')

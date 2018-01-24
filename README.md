@@ -17,10 +17,13 @@ $ pip install nono-line
 from nonoLINE import nonoLINE
 
 # Create a new nonoLINE object.
-nono_line = nonoLINE('YOUR_ACCESS_TOKEN', max_workers=4)
+nono_line = nonoLINE('YOUR_ACCESS_TOKEN', max_workers=4, default_tag='TEST1')
 
 # Send a test message to LINE Notify.
 nono_line.send('test message')
+
+# Send a test message to LINE Notify with a specific tag.
+nono_line.send('test message', tag='TEST2')
 
 # Send a test message to LINE Notify asynchronously.
 nono_line.send('test message', send_async=True)
@@ -44,6 +47,9 @@ The limit of API calls per hour is set to 1000. The limit is per access token.
 * [LINE Sticker list](https://devdocs.line.me/files/sticker_list.pdf)
 
 ## Version History
+* 2018.01.24 : v0.0.5
+  * Add a tag to your message if needed.
+
 * 2017.12.29 : v0.0.4
   * Set a parent class(object) to nonoLINE.
 

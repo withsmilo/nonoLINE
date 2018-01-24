@@ -16,7 +16,7 @@ def _check_validity(chat_access_token):
 
 
 class nonoLINE(object):
-    def __init__(self, chat_access_token, max_workers=4):
+    def __init__(self, chat_access_token, max_workers=4, default_tag=None):
         """Create a new nonoLINE object.
 
         This class implements a simple notification helper to send some messages to LINE Notify.
@@ -27,6 +27,8 @@ class nonoLINE(object):
             your access token for chat room to notify
         max_workers : int (optional)
             max workers to send some notifications asynchronously
+        default_tag : str (optional)
+            a default tag attached to every messages in format of '[TAG] '
         """
         # Check validity of chat_access_token
         if chat_access_token is None:
@@ -39,9 +41,10 @@ class nonoLINE(object):
         self._headers = {'Authorization': 'Bearer {}'.format(chat_access_token),
                          'Content-Type': 'application/x-www-form-urlencoded'}
         self._url = 'https://notify-api.line.me/api/notify'
-        self.session = FuturesSession(max_workers=max_workers)
+        self._session = FuturesSession(max_workers=max_workers)
+        self._default_tag = default_tag
 
-    def send(self, message, sticker__id_pkgid=None, send_async=False):
+    def send(self, message, sticker__id_pkgid=None, send_async=False, tag=None):
         """This function send a given message to LINE Notify.
 
         Parameters
@@ -54,7 +57,12 @@ class nonoLINE(object):
             If you pass a sticker list, a sticker will be selected randomly before sending the message.
         send_async : bool (optional)
             If you would like to send asynchronously, set this to True.
+        tag : str (optional)
+            a tag attached to every messages in format of '[TAG] '. This tag is prior to the default tag.
         """
+        message = '[{tag}] {msg}'.format(tag=tag, msg=message) if tag is not None \
+            else '[{tag}] {msg}'.format(tag=self._default_tag, msg=message) if self._default_tag is not None \
+            else message
         data = {'message': message}
         if type(sticker__id_pkgid) is tuple and len(sticker__id_pkgid) == 2:
             data.update({'stickerId': sticker__id_pkgid[0], 'stickerPackageId': sticker__id_pkgid[1]})
@@ -66,7 +74,7 @@ class nonoLINE(object):
         # Send a message
         try:
             if send_async:
-                self.session.post(self._url, headers=self._headers, params=data)
+                self._session.post(self._url, headers=self._headers, params=data)
             else:
                 res = requests.post(self._url, headers=self._headers, params=data).json()
                 if len(res) != 2 or res['message'] != 'ok' or res['status'] != 200:
