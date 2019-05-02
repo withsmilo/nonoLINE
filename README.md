@@ -47,6 +47,9 @@ The limit of API calls per hour is set to 1000. The limit is per access token.
 * [LINE Sticker list](https://devdocs.line.me/files/sticker_list.pdf)
 
 ## Version History
+* 2019.05.02 : v0.0.6
+  * Handle some error cases of *requests*.
+
 * 2018.01.24 : v0.0.5
   * Add a tag to your message if needed.
 
