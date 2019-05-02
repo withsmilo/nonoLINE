@@ -3,14 +3,55 @@ import requests
 import logging
 import random
 from nonoLINE import InvalidTokenException
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+from requests.exceptions import RequestException
 from requests_futures.sessions import FuturesSession
 
 
+# Imported from https://www.peterbe.com/plog/best-practice-with-retries-with-requests
+# http status code : https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+def _requests_retry_session(
+        retries=3,
+        backoff_factor=0.3,
+        status_forcelist=(500,   # Internal Server Error
+                          502,   # Bad Gateway
+                          503,   # Service Unavailable
+                          504),  # Gateway Timeout
+        session=None):
+    session = session or requests.Session()
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
+
+
 def _check_validity(chat_access_token):
-    res = requests.get('https://notify-api.line.me/api/status',
-                       headers={'Authorization': 'Bearer {}'.format(chat_access_token)}).json()
+    try:
+        res = _requests_retry_session().get(
+            url='https://notify-api.line.me/api/status',
+            headers={'Authorization': 'Bearer {}'.format(chat_access_token)})
+    except RequestException as e:
+        raise InvalidTokenException(
+            "Occurred RequestException:{}".format(str(e)))
+
+    if res.status_code != requests.codes.ok:
+        raise InvalidTokenException(
+            "response's status_code: {}".format(res.status_code))
+
+    res = res.json()
+    if len(res) == 0:
+        raise InvalidTokenException("response is empty")
+
     if len(res) != 4 or res['message'] != 'ok' or res['status'] != 200:
-        raise InvalidTokenException('Failed to check validity. error:{}'.format(res))
+        raise InvalidTokenException("Failed to check validity. error:{}".format(res))
 
     return res['targetType'], res['target'].encode('utf-8')
 
